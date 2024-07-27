@@ -14,8 +14,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ParkingLotServiceImpl implements ParkingLotService {
-    private ParkingLotDAO parkingLotDAO;
+
+    private final ParkingLotDAO parkingLotDAO;
     private List<Vehicle> parkedVehicles = new ArrayList<>();
+    private boolean lotCreated = false; // Flag to track lot creation
 
     @Autowired
     public ParkingLotServiceImpl(ParkingLotDAO parkingLotDAO) {
@@ -24,10 +26,14 @@ public class ParkingLotServiceImpl implements ParkingLotService {
 
     @Override
     public String createLot(List<ParkingFloor> floors) {
+        if (lotCreated) {
+            return "A parking lot is already created";
+        }
         List<ParkingSlot> allSlots = floors.stream()
                 .flatMap(floor -> floor.getSlots().stream())
                 .collect(Collectors.toList());
         parkingLotDAO.createLot(allSlots);
+        lotCreated = true; // Set the flag to true after creating the lot
         return "Parking lot created";
     }
 
@@ -89,13 +95,7 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
-    public String getSlotInfoByVehicle(String registrationNumber) {
-        return parkingLotDAO.getAllFloors().stream()
-                .flatMap(floor -> floor.getSlots().stream()
-                        .filter(slot -> slot.isOccupied()
-                                && slot.getVehicle().getRegistrationNumber().equalsIgnoreCase(registrationNumber))
-                        .map(slot -> "Vehicle " + registrationNumber + " is parked at slot " + slot.getSlotNumber()))
-                .findFirst()
-                .orElse("Vehicle not found");
+    public boolean isLotCreated() {
+        return lotCreated;
     }
 }

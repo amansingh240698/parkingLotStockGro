@@ -6,6 +6,7 @@ import com.parkinglot.parkinglot.model.Vehicle;
 import java.util.List;
 
 public interface ParkingLotService {
+
     String createLot(List<ParkingFloor> floors);
 
     String parkVehicle(Vehicle vehicle);
@@ -18,5 +19,5 @@ public interface ParkingLotService {
 
     String getRegistrationByVehicle(String registrationNumber);
 
-    String getSlotInfoByVehicle(String registrationNumber);
+    boolean isLotCreated();
 }
