@@ -20,4 +20,6 @@ public interface ParkingLotService {
     String getRegistrationByVehicle(String registrationNumber);
 
     boolean isLotCreated();
+
+    String resetLot();
 }

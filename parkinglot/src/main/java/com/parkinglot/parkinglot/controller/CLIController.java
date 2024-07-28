@@ -108,6 +108,8 @@ public class CLIController implements ParkingLotController {
                 return getVehiclesByColor(args);
             case "registration":
                 return getRegistrationByVehicle(args);
+            case "reset":
+                return parkingLotService.resetLot();
             case "exit":
                 return "Exiting...";
             default:
